@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8">
+    <title>Новости</title>
+</head>
+<body>
+<div>
+    <h2>Новости <br> Только для залогинившихся пользователей.</h2>
+    <body>
+    <div>
+        <td>Еще один прекрасный день чтобы умереть [[${#httpServletRequest.remoteUser}]]!</td>
+    </div>
+    </body>
+    <a href="/">Главная</a>
+</div>
+</body>
+</html>
