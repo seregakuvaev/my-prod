@@ -12,7 +12,7 @@ public class Role implements GrantedAuthority {
     private Long id;
     private String name;
     @Transient
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<User> users;
     public Role() {
     }

@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService implements UserDetailsService {
     @PersistenceContext
     private EntityManager em;
@@ -27,18 +29,14 @@ public class UserService implements UserDetailsService {
     RoleRepository roleRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
-
-
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-
-        if (user == null) {
+        userRepository.findAllUsers();
+        User list = userRepository.findByUsername(username);
+        if (list == null) {
             throw new UsernameNotFoundException("User not found");
         }
-
-        return user;
+        return list;
     }
 
     public User findUserById(Long userId) {
@@ -51,8 +49,8 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean saveUser(User user) {
+        userRepository.findAllUsers();
         User userFromDB = userRepository.findByUsername(user.getUsername());
-
         if (userFromDB != null) {
             return false;
         }
@@ -61,6 +59,15 @@ public class UserService implements UserDetailsService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
+    }
+
+    public void updateUser(Long id, String username) {
+        Optional<User> users = userRepository.findById(id);
+        if (users.isPresent()){
+            User user = users.get();
+            user.setUsername(username);
+            userRepository.save(user);
+        }
     }
 
     public boolean deleteUser(Long userId) {

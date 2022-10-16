@@ -1,22 +1,63 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head>
-    <meta charset="utf-8">
-    <title>Новости</title>
-</head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Bootstrap Simple Login Form</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style>
+    .login-form {
+        width: 340px;
+        margin: 50px auto;
+        font-size: 15px;
+    }
+    .login-form form {
+        margin-bottom: 15px;
+        background: #f7f7f7;
+        box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+    .login-form h2 {
+        margin: 0 0 15px;
+    }
+    .form-control, .btn {
+        min-height: 38px;
+        border-radius: 2px;
+    }
+    .btn {
+        font-size: 15px;
+        font-weight: bold;
+    }
+</style>
 <body>
 <div>
-    <h2>Новости <br> Только для залогинившихся пользователей.</h2>
-    <body>
-    <div>
-        <td>Еще один прекрасный день чтобы умереть [[${#httpServletRequest.remoteUser}]]!</td>
-    </div>
-    </body>
+    <table class="table table-dark table-bordered table-hover">
+        <thead>
+
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Role</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td></td>
+            <td th:text="${user.getId()}">Id</td>
+            <td th:text="${user.getUsername()}">Name</td>
+            <td th:text="${user.getRoles()}">Role</td>
+        </tr>
+        </tbody>
+    </table>
     <sec:authorize access="isAuthenticated()">
-        <h4><a href="/logout">Выйти</a></h4>
+        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><a href="/logout"><button  type="button" class="btn btn-secondary btn-lg">Logout</button></a></div>
     </sec:authorize>
-    <a href="/">Главная</a>
+    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><a href="/index"><button  type="button" class="btn btn-primary btn-lg">Menu</button></a></div>
 </div>
 </body>
 </html>
