@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -48,6 +49,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
+    public Optional<Role> findRoleById(Long id){
+        return roleRepository.findById(id);
+    }
+
     public boolean saveUser(User user) {
         userRepository.findAllUsers();
         User userFromDB = userRepository.findByUsername(user.getUsername());
@@ -61,11 +66,12 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public void updateUser(Long id, String username) {
+    public void updateUser(Long id, String username, Set<Role> role) {
         Optional<User> users = userRepository.findById(id);
         if (users.isPresent()){
             User user = users.get();
             user.setUsername(username);
+            user.setRoles(role);
             userRepository.save(user);
         }
     }

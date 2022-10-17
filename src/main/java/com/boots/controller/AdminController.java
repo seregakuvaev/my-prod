@@ -1,5 +1,6 @@
 package com.boots.controller;
 
+import com.boots.entity.Role;
 import com.boots.entity.User;
 import com.boots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.*;
 
 @Controller
 public class AdminController {
@@ -39,10 +41,19 @@ public class AdminController {
     }
 
     @PostMapping("/update")
-    public String updateUser(@RequestParam(name = "userId", defaultValue = "0") String userId, @ModelAttribute("user") User user) {
+    public String updateUser(@RequestParam(name = "userId") String userId,
+                             @RequestParam(name = "Roles") String roles,
+                             @ModelAttribute("user") User user) {
         User lastUser = userService.findUserById(Long.valueOf(userId));
-        user.setPassword(lastUser.getPassword());
-        userService.updateUser(Long.valueOf(userId), user.getUsername());
+        Set<Role> roleSet = new HashSet<Role> ();
+        System.out.println(roles);
+        System.out.println(roles.equals("1"));
+        if (Objects.equals(roles, "1")){
+            roleSet.add(new Role(1L, "ROLE_USER"));
+        }else {
+            roleSet.add(new Role(2L, "ROLE_ADMIN"));
+        }
+            userService.updateUser(Long.valueOf(userId), user.getUsername(), roleSet);
         return "redirect:/admin";
     }
 }

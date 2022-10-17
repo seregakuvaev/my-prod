@@ -160,7 +160,17 @@
                           <label for="Username">Username</label>
                           <input type="text" name="Username" th:placeholder="${user.getUsername()}"  id="Username" required class="form-control">
                         </div>
-<!--                        <div class="form-group">-->
+                        <div class="form-group">
+                        <label for="Roles">Role User
+                          <input type="text" th:placeholder="${user.getRoles()}" required class="form-control" name="Roles" list="Roles" />
+                        </label>
+                        <datalist id="Roles">
+                          <option value="1">"ROLE_USER"</option>
+                          <option value="2">"ROLE_ADMIN"</option>
+                        </datalist>
+                        </div>
+
+                        <!--                        <div class="form-group">-->
 <!--                          <label for="Role">Role</label>-->
 <!--                          <input type="text" name="Role" id="Role" th:placeholder="${user.getRoles()}" required class="form-control">-->
 <!--                        </div>-->
