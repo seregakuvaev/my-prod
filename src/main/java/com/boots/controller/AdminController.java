@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
 
@@ -42,18 +44,31 @@ public class AdminController {
 
     @PostMapping("/update")
     public String updateUser(@RequestParam(name = "userId") String userId,
+                             @RequestParam(name = "Username") String username,
                              @RequestParam(name = "Roles") String roles,
-                             @ModelAttribute("user") User user) {
-        User lastUser = userService.findUserById(Long.valueOf(userId));
+                             @RequestParam(name = "Password") String password) {
         Set<Role> roleSet = new HashSet<Role> ();
-        System.out.println(roles);
-        System.out.println(roles.equals("1"));
-        if (Objects.equals(roles, "1")){
+        if (Objects.equals(roles, "ROLE_USER")){
             roleSet.add(new Role(1L, "ROLE_USER"));
         }else {
             roleSet.add(new Role(2L, "ROLE_ADMIN"));
         }
-            userService.updateUser(Long.valueOf(userId), user.getUsername(), roleSet);
+            userService.updateUser(Long.valueOf(userId), username, roleSet, password);
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/add")
+    public String addUser(@RequestParam(name = "addUsername") String userName,
+                          @RequestParam(name = "addPassword") String password,
+                          @RequestParam(name = "addRole") String role) {
+        User user = new User();
+        user.setUsername(userName);
+        user.setPassword(password);
+        if (Objects.equals(role, "ROLE_ADMIN")){
+            userService.saveUser(user, 2);
+        } else {
+            userService.saveUser(user, 1);
+        }
         return "redirect:/admin";
     }
 }

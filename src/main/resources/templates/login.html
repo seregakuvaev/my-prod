@@ -49,6 +49,6 @@
   </form>
   <p class="text-center"><a href="/registration">Create an Account</a></p>
 </div>
-<div sec:authorize access="isAuthenticated()" class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><a href="/logout"><button  type="button" class="btn btn-secondary btn-lg">Check for logout</button></a></div>
+<div sec:authorize="isAuthenticated()" class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><a href="/logout"><button  type="button" class="btn btn-secondary btn-lg">Check for logout</button></a></div>
 </body>
 </html>

@@ -53,25 +53,29 @@ public class UserService implements UserDetailsService {
         return roleRepository.findById(id);
     }
 
-    public boolean saveUser(User user) {
+    public boolean saveUser(User user, int role) {
         userRepository.findAllUsers();
         User userFromDB = userRepository.findByUsername(user.getUsername());
         if (userFromDB != null) {
             return false;
         }
-
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        if(role == 1){
+            user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        } else {
+            user.setRoles(Collections.singleton(new Role(2L, "ROLE_ADMIN")));
+        }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
     }
 
-    public void updateUser(Long id, String username, Set<Role> role) {
+    public void updateUser(Long id, String username, Set<Role> role, String password) {
         Optional<User> users = userRepository.findById(id);
         if (users.isPresent()){
             User user = users.get();
             user.setUsername(username);
             user.setRoles(role);
+            user.setPassword(bCryptPasswordEncoder.encode(password));
             userRepository.save(user);
         }
     }
