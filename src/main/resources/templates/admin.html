@@ -2,335 +2,389 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Bootstrap Table with Search Column Feature</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-  <style>
-    body {
-      color: #566787;
-      background: #f7f5f2;
-      font-family: 'Roboto', sans-serif;
-    }
-    .table-responsive {
-      margin: 30px 0;
-    }
-    .table-wrapper {
-      min-width: 1000px;
-      background: #fff;
-      padding: 20px 25px;
-      border-radius: 3px;
-      box-shadow: 0 1px 1px rgba(0,0,0,.05);
-    }
-    .table-title {
-      color: #fff;
-      background: #3a12cc;
-      padding: 16px 25px;
-      margin: -20px -25px 10px;
-      border-radius: 3px 3px 0 0;
-    }
-    .table-title h2 {
-      margin: 5px 0 0;
-      font-size: 24px;
-    }
-    .search-box input {
-      height: 34px;
-      padding-right: 35px;
-      background: #f4fcfd;
-      border: none;
-      border-radius: 2px !important;
-    }
-    .search-box input:focus {
-      background: #fff;
-    }
-    .search-box input::placeholder {
-      font-style: italic;
-    }
-    .search-box i {
-      color: #a0a5b1;
-      font-size: 19px;
-      position: relative;
-      top: 2px;
-    }
-    table.table {
-      table-layout: fixed;
-      margin-top: 15px;
-    }
-    table.table tr th, table.table tr td {
-      border-color: #e9e9e9;
-    }
-    table.table th i {
-      font-size: 13px;
-      margin: 0 5px;
-      cursor: pointer;
-    }
-    table.table th:first-child {
-      width: 60px;
-    }
-    table.table th:last-child {
-      width: 120px;
-    }
-    table.table td a {
-      color: #a0a5b1;
-      display: inline-block;
-      margin: 0 5px;
-    }
-    table.table td a.view {
-      color: #03A9F4;
-    }
-    .text-collor{
-      color: #28052b;
-    }
-    table.table td a.edit {
-      color: #FFC107;
-    }
-    table.table td a.delete {
-      color: #E34724;
-    }
-    table.table td i {
-      font-size: 19px;
-    }
-    .login-form form {
-      margin-bottom: 15px;
-      background: #f7f7f7;
-      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-      padding: 30px;
-    }
-    .login-form h2 {
-      margin: 0 0 15px;
-    }
-    .btn {
-      font-size: 15px;
-      font-weight: bold;
-    }
-    .tabs {
-      position: relative; /* Относительное позиционирование */
-    }
-    .tab, .tab-title {
-      display: inline-block; /* Выстраиваем по горизонтали */
-    }
-    .tab input[type="radio"] { display: none; }
-    .tab-title {
-      background: #ffae0d; /* Цвет фона */
-      padding: 5px 10px; /* Поля вокруг текста */
-      border: 1px solid #666; /* Параметры рамки */
-      border-bottom: none; /* Снизу линию убираем */
-    }
-    .tab-content {
-      position: absolute; /* Абсолютное позиционирование */
-      border: 1px solid #666; /* Параметры рамки */
-      padding: 10px; /* Поля вокруг текста */
-      left: 0; /* Размещаем у левого края */
-      width: calc(100% - 20px); /* Ширина содержимого */
-      display: none; /* Прячем вкладку */
-    }
-    .tab :checked + .tab-title {
-      position: relative; /* Относительное позиционирование */
-      background: #ffae0d; /* Цвет фона */
-      top: 1px; /* Сдвигаем вниз */
-      z-index: 1; /* Отображаем поверх содержимого */
-    }
-    .tab :checked ~ .tab-content {
-      display: block; /* Показываем активную вкладку */
-    }
-  </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Bootstrap Table with Search Column Feature</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            color: #566787;
+            background: #f7f5f2;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .table-responsive {
+            margin: 30px 0;
+        }
+
+        .table-wrapper {
+            min-width: 1000px;
+            background: #fff;
+            padding: 20px 25px;
+            border-radius: 3px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+        }
+
+        .table-title {
+            color: #fff;
+            background: #3a12cc;
+            padding: 16px 25px;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+
+        .table-title h2 {
+            margin: 5px 0 0;
+            font-size: 24px;
+        }
+
+        .search-box input {
+            height: 34px;
+            padding-right: 35px;
+            background: #f4fcfd;
+            border: none;
+            border-radius: 2px !important;
+        }
+
+        .search-box input:focus {
+            background: #fff;
+        }
+
+        .search-box input::placeholder {
+            font-style: italic;
+        }
+
+        .search-box i {
+            color: #a0a5b1;
+            font-size: 19px;
+            position: relative;
+            top: 2px;
+        }
+
+        table.table {
+            table-layout: fixed;
+            margin-top: 15px;
+        }
+
+        table.table tr th, table.table tr td {
+            border-color: #e9e9e9;
+        }
+
+        table.table th i {
+            font-size: 13px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        table.table th:first-child {
+            width: 60px;
+        }
+
+        table.table th:last-child {
+            width: 120px;
+        }
+
+        table.table td a {
+            color: #a0a5b1;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        table.table td a.view {
+            color: #03A9F4;
+        }
+
+        .text-collor {
+            color: #28052b;
+        }
+
+        table.table td a.edit {
+            color: #FFC107;
+        }
+
+        table.table td a.delete {
+            color: #E34724;
+        }
+
+        table.table td i {
+            font-size: 19px;
+        }
+
+        .login-form form {
+            margin-bottom: 15px;
+            background: #f7f7f7;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+
+        .login-form h2 {
+            margin: 0 0 15px;
+        }
+
+        .btn {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .tabs {
+            position: relative; /* Относительное позиционирование */
+        }
+
+        .tab, .tab-title {
+            display: inline-block; /* Выстраиваем по горизонтали */
+        }
+
+        .tab input[type="radio"] {
+            display: none;
+        }
+
+        .tab-title {
+            background: #ffae0d; /* Цвет фона */
+            padding: 5px 10px; /* Поля вокруг текста */
+            border: 1px solid #666; /* Параметры рамки */
+            border-bottom: none; /* Снизу линию убираем */
+        }
+
+        .tab-content {
+            position: absolute; /* Абсолютное позиционирование */
+            border: 1px solid #666; /* Параметры рамки */
+            padding: 10px; /* Поля вокруг текста */
+            left: 0; /* Размещаем у левого края */
+            width: calc(100% - 20px); /* Ширина содержимого */
+            display: none; /* Прячем вкладку */
+        }
+
+        .tab :checked + .tab-title {
+            position: relative; /* Относительное позиционирование */
+            background: #ffae0d; /* Цвет фона */
+            top: 1px; /* Сдвигаем вниз */
+            z-index: 1; /* Отображаем поверх содержимого */
+        }
+
+        .tab :checked ~ .tab-content {
+            display: block; /* Показываем активную вкладку */
+        }
+    </style>
 </head>
 <body>
 <div class="tabs btn-dark">
-  <div class="tab">
-    <input type="radio" id="tab1" name="tab-group" checked>
-    <label for="tab1" class="tab-title">Users List</label>
-    <section class="tab-content">
-      <div class="container-lg">
-        <div class="table-responsive">
-          <div class="table-wrapper">
-            <div class="table-title table-hover">
-              <div class="row">
-                <div class="col-sm-6">
-                  <h2>Users</h2>
-                </div>
-              </div>
-            </div>
-            <table class="table table-striped">
-              <thead>
-              <tr>
-                <th style="width: 22%;">Id</th>
-                <th style="width: 22%;">Name</th>
-                <th>Roles</th>
-                <th>Actions</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr th:each="user : ${allUsers}">
-                <td th:text="${user.getId()}"></td>
-                <td th:text="${user.getUsername()}"></td>
-                <td th:text="${user.getRoles()}"></td>
-                <td>
-                  <!--Модальное окно для эдита-->
-                  <div class="container">
-                    <div class="height d-flex justify-content-center align-items-center">
-                      <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="${'#edituser'+user.username}">
-                        Edit
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="modal fade" th:id="${'edituser'+user.username}" aria-labelledby="exampleModalLabel" tabindex="-1"  aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header float-right">
-                          <h5>User details</h5>
-                          <div class="text-right">
-                            <i data-dismiss="modal" aria-label="Close" class="fa fa-close"></i>
-                          </div>
+    <div class="tab">
+        <input type="radio" id="tab1" name="tab-group" checked>
+        <label for="tab1" class="tab-title">Users List</label>
+        <section class="tab-content">
+            <div class="container-lg">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+                        <div class="table-title table-hover">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h2>Users</h2>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                          <div class="container-inner">
-                            <form action="/update" method="post" id="bs-form">
-                              <input type="hidden" name="userId" th:value="${user.getId()}" >
-                              <div class="form-group">
-                                <label for="Id" >Id</label>
-                                <input type="text"  name="userId" disabled th:placeholder="${user.getId()}"  id="Id" required class="form-control">
-                              </div>
-                              <div class="form-group">
-                                <label for="Username">Username</label>
-                                <input type="text" name="Username" th:value="${user.getUsername()}"  id="Username" required class="form-control">
-                              </div>
-                              <div class="form-group">
-                                <label for="Password">Password</label>
-                                <input type="password"  name="Password" id="Password" class="form-control" />
-                              </div>
-                              <div class="form-group">
-                                <label for="Roles">Role User
-                                  <input type="text" th:placeholder="${user.getRoles()}"  required class="form-control" name="Roles" list="Roles" />
+                        <div class="container">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th style="width: 22%;">Id</th>
+                                    <th style="width: 22%;">Name</th>
+                                    <th>Roles</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="data">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="/index" class="btn btn-primary btn-block">Главная</a>
+                        <sec:authorize access="isAuthenticated()">
+                            <h4><a href="/logout" class="btn btn-secondary btn-block">Выйти</a></h4>
+                        </sec:authorize>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="tab">
+        <input type="radio" id="tab2" name="tab-group">
+        <label for="tab2" class="tab-title">Add User</label>
+        <section class="tab-content">
+            <div class="container-lg">
+                <div class="table-responsive">
+                    <div class="table-wrapper">
+                        <div class="table-title table-hover">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h2>Add User</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <form action="/add" class="mx-1 mx-md-4 text-center">
+                            <div class="form-group">
+                                <h2 class="text-center text-collor">Username</h2>
+                                <label for="addUsername"></label>
+                                <input type="text" name="addUsername" id="addUsername" required class="form-control">
+                            </div>
+                            <h2 class="text-center text-collor">Password</h2>
+                            <div class="form-group">
+                                <label for="addPassword">Password</label>
+                                <input type="password" name="addPassword" id="addPassword" class="form-control"/>
+                            </div>
+                            <h2 class="text-center text-collor">Role</h2>
+                            <div class="form-group">
+                                <label for="addRole">addRole User
+                                    <input type="text" required class="form-control" name="addRole" list="addRole"/>
                                 </label>
-                                <datalist id="Roles">
-                                  <option value="ROLE_USER"></option>
-                                  <option value="ROLE_ADMIN"></option>
+                                <datalist id="addRole">
+                                    <option value="ROLE_USER"></option>
+                                    <option value="ROLE_ADMIN"></option>
                                 </datalist>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary"  value="Update User" >Save changes</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
+                            </div>
+                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                <button type="submit" class="btn btn-primary btn-lg">Add User</button>
+                            </div>
+                        </form>
+                        <a href="/index" class="btn btn-primary btn-block">Главная</a>
+                        <sec:authorize access="isAuthenticated()">
+                            <h4><a href="/logout" class="btn btn-secondary btn-block">Выйти</a></h4>
+                        </sec:authorize>
                     </div>
-                  </div>
-                  <!--Конец эдита-->
-
-                  <!--Модальное окно для удаления-->
-
-                  <div class="container">
-                    <div class="height d-flex justify-content-center align-items-center">
-                      <button type="button" class="btn btn-danger" data-toggle="modal" th:data-target="${'#Delete'+user.username}">
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="modal fade" th:id="${'Delete'+user.username}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header float-right">
-                          <h5>User details</h5>
-                          <div class="text-right">
-                            <i data-dismiss="modal" aria-label="Close" class="fa fa-close"></i>
-                          </div>
-                        </div>
-                        <div class="modal-body">
-                          <div class="container-inner">
-                            <form>
-                              <div class="form-group">
-                                <label for="IdDel" >Id</label>
-                                <input type="text" disabled th:placeholder="${user.getId()}" id="IdDel" required class="form-control">
-                              </div>
-                              <div class="form-group">
-                                <label for="Username1">Username</label>
-                                <input type="text" disabled th:placeholder="${user.getUsername()}"  id="Username1" required class="form-control">
-                              </div>
-                              <div class="form-group">
-                                <label for="Role">Role</label>
-                                <input type="password" th:placeholder="${user.getRoles()}"  disabled id="Role" class="form-control" />
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-danger"  value="Delete" >Delete</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--Конец удаления-->
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            <a href="/index" class="btn btn-primary btn-block">Главная</a>
-            <sec:authorize access="isAuthenticated()">
-              <h4><a href="/logout" class="btn btn-secondary btn-block">Выйти</a></h4>
-            </sec:authorize>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-  <div class="tab">
-    <input type="radio" id="tab2" name="tab-group">
-    <label for="tab2" class="tab-title">Add User</label>
-    <section class="tab-content">
-      <div class="container-lg">
-        <div class="table-responsive">
-          <div class="table-wrapper">
-            <div class="table-title table-hover">
-              <div class="row">
-                <div class="col-sm-6">
-                  <h2>Add User</h2>
                 </div>
-              </div>
             </div>
-            <form action="/add" class="mx-1 mx-md-4 text-center">
-              <div class="form-group">
-                <h2 class="text-center text-collor">Username</h2>
-                <label for="addUsername"></label>
-                <input type="text" name="addUsername" id="addUsername" required class="form-control">
-              </div>
-              <h2 class="text-center text-collor">Password</h2>
-              <div class="form-group">
-                <label for="addPassword">Password</label>
-                <input type="password"  name="addPassword" id="addPassword" class="form-control" />
-              </div>
-              <h2 class="text-center text-collor">Role</h2>
-              <div class="form-group">
-                <label for="addRole">addRole User
-                  <input type="text"  required class="form-control" name="addRole" list="addRole" />
-                </label>
-                <datalist id="addRole">
-                  <option value="ROLE_USER"></option>
-                  <option value="ROLE_ADMIN"></option>
-                </datalist>
-              </div>
-              <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><button type="submit" class="btn btn-primary btn-lg">Add User</button></div>
-            </form>
-            <a href="/index" class="btn btn-primary btn-block">Главная</a>
-            <sec:authorize access="isAuthenticated()">
-              <h4><a href="/logout" class="btn btn-secondary btn-block">Выйти</a></h4>
-            </sec:authorize>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+        </section>
+    </div>
 </div>
+<script type="text/javascript">
+    fetch("http://localhost:8080/admin/getallusers").then(
+        res=>{
+            res.json().then(
+                data=>{
+                    if(data.length > 0){
+                        let temp = "";
+                        let users = data;
+                        data.forEach((u)=>{
+                            let roles = "";
+                            if(u.roles.length > 1){
+                                roles += u.roles[0].name + ", " + roles + u.roles[1].name
+                            } else {
+                                roles += u.roles[0].name
+                            }
+                            temp += "<tr><td>" + u.id + "</td>";
+                            temp += "<td>" + u.username + "</td>";
+                            temp += "<td>" + roles + "</td>";
+                            temp += "<td>" +
+                                        "<div>" +
+                                            "<div>" +
+                                                "<button data-target='#edituser" + u.id + "' id='edit" + u.id + "' type='button' data-toggle='modal'>" +
+                                                    "Edit" +
+                                                "</button>" +
+                                            "</div>" +
+                                        "</div>";
+
+                            temp += "<div class='modal fade' id='edituser" + u.id + "' aria-labelledby='exampleModalLabel' tabindex='-1'  aria-hidden='true'>" +
+                                "                    <div class='modal-dialog'>" +
+                                "                      <div class='modal-content'>" +
+                                "                        <div class='modal-header float-right'>" +
+                                "                          <h5>User details</h5>" +
+                                "                          <div class=\"text-right\">" +
+                                "                            <i data-dismiss=\"modal\" aria-label=\"Close\" class=\"fa fa-close\"></i>" +
+                                "                          </div>" +
+                                "                        </div>" +
+                                "                        <div class=\"modal-body\">" +
+                                "                          <div class=\"container-inner\">" +
+                                "                            <form action=\"/update\" method=\"post\">" +
+                                "                              <input type=\"hidden\" name=\"userId\" value='" + u.id + "' >" +
+                                "                              <div class=\"form-group text-center\">" +
+                                "                                <label for=\"Id\" >Id</label>" +
+                                "                                <input type=\"text\"  name=\"userId\" disabled placeholder='" + u.id + "' required class=\"form-control text-center\">" +
+                                "                              </div>" +
+                                "                              <div class=\"form-group text-center\">" +
+                                "                                <label for=\"Username\">Username</label>" +
+                                "                                <input type=\"text\" name=\"Username\" value='" + u.username + "'required class=\"form-control text-center\">" +
+                                "                              </div>" +
+                                "                              <div class=\"form-group text-center\">" +
+                                "                                <label for=\"Password\">Password</label>" +
+                                "                                <input type=\"password\"  name=\"Password\" class=\"form-control text-center\" />" +
+                                "                              </div>" +
+                                "                              <div class=\"form-group text-center\">" +
+                                "                                <label for=\"Roles\">Role User" +
+                                "                                  <input type=\"text\" placeholder='" + roles + "'  required class=\"form-control text-center\" name=\"Roles\" list=\"Roles\" />" +
+                                "                                </label>" +
+                                "                                <datalist id=\"Roles\">" +
+                                "                                  <option value=\"ROLE_USER\"></option>" +
+                                "                                  <option value=\"ROLE_ADMIN\"></option>" +
+                                "                                </datalist>" +
+                                "                              </div>" +
+                                "                              <div class=\"modal-footer\">" +
+                                "                                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>" +
+                                "                                <button type=\"submit\" class=\"btn btn-primary\"  value=\"Update User\" >Save changes</button>" +
+                                "                              </div>" +
+                                "                            </form>" +
+                                "                          </div>" +
+                                "                        </div>" +
+                                "                      </div>" +
+                                "                    </div>" +
+                                "                  </div>"
+
+                            temp += "<div class=\"modal fade\" id='deleteuser" + u.id + "' tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n" +
+                                "                    <div class=\"modal-dialog\">\n" +
+                                "                      <div class=\"modal-content\">\n" +
+                                "                        <div class=\"modal-header float-right\">\n" +
+                                "                          <h5>User details</h5>\n" +
+                                "                          <div class=\"text-right\">\n" +
+                                "                            <i data-dismiss=\"modal\" aria-label=\"Close\" class=\"fa fa-close\"></i>\n" +
+                                "                          </div>\n" +
+                                "                        </div>\n" +
+                                "                        <div class=\"modal-body\">\n" +
+                                "                          <div class=\"container-inner\">\n" +
+                                "                            <form action='delete' method='post'>\n" +
+                                "                              <div class=\"form-group text-center\">\n" +
+                                "                                  <input hidden name=\"userId\" value='" + u.id + "'/>" +
+                                "                                <label>Id<input type=\"text\" disabled placeholder='" + u.id + "' required class=\"form-control text-center\"></label>\n" +
+                                "                              </div>\n" +
+                                "                              <div class=\"form-group text-center\">\n" +
+                                "                                <label>Username<input type=\"text\" disabled placeholder='" + u.username + "' required class=\"form-control text-center\"></label>\n" +
+                                "                              </div>\n" +
+                                "                              <div class=\"form-group text-center\">\n" +
+                                "                                <label>Role<input type=\"password\" placeholder='" + roles + "'  disabled class=\"form-control text-center\" /></label>\n" +
+                                "                              </div>\n" +
+                                "                              <div class=\"modal-footer\">\n" +
+                                "                                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n" +
+                                "                                <button type=\"submit\" class=\"btn btn-danger r\">Delete</button>\n" +
+                                "                              </div>\n" +
+                                "                            </form>\n" +
+                                "                          </div>\n" +
+                                "                        </div>\n" +
+                                "                      </div>\n" +
+                                "                    </div>\n" +
+                                "                  </div>"
+
+                            temp +=     "<div>" +
+                                            "<div>" +
+                                                "<button data-target='#deleteuser" + u.id + "' id='delete" + u.id + "' type='button' data-toggle='modal'>" +
+                                                    "Delete" +
+                                                "</button>" +
+                                             "</div>" +
+                                        "</div>" +
+                                    "</td></tr>";
+                        })
+                        document.getElementById("data").innerHTML = temp;
+                        users.forEach((u)=>{
+                            document.getElementById("edit" + u.id).className = 'btn btn-primary';
+                            document.getElementById("delete" + u.id).className = 'btn btn-danger';
+                        })
+                    }
+                }
+            )
+        }
+    )
+</script>
 </body>
 </html>

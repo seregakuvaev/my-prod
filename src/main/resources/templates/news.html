@@ -48,9 +48,9 @@
         <tbody>
         <tr>
             <td></td>
-            <td th:text="${user.getId()}">Id</td>
-            <td th:text="${user.getUsername()}">Name</td>
-            <td th:text="${user.getRoles()}">Role</td>
+            <td id="id"></td>
+            <td id="username"></td>
+            <td id="role"></td>
         </tr>
         </tbody>
     </table>
@@ -59,5 +59,22 @@
     </sec:authorize>
     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><a href="/index"><button  type="button" class="btn btn-primary btn-lg">Menu</button></a></div>
 </div>
+<script type="text/javascript" th:inline="javascript">
+
+    /*<![CDATA[*/
+    const baseUrl = [[${session}]];
+    /*]]>*/
+
+    $(document).ready(
+        function () {
+            let arr = [];
+            for(const name of baseUrl.SPRING_SECURITY_CONTEXT.authentication.principal.roles){
+                arr.push(name.name)
+            }
+            $("#id").append(baseUrl.SPRING_SECURITY_CONTEXT.authentication.principal.id)
+            $("#username").append(baseUrl.SPRING_SECURITY_CONTEXT.authentication.principal.username)
+            $("#role").append(arr.toString())
+        });
+</script>
 </body>
 </html>
