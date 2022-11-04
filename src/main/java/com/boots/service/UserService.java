@@ -75,7 +75,9 @@ public class UserService implements UserDetailsService {
             User user = users.get();
             user.setUsername(username);
             user.setRoles(role);
-            user.setPassword(bCryptPasswordEncoder.encode(password));
+            if(password.length() < 40) {
+                user.setPassword(bCryptPasswordEncoder.encode(password));
+            }
             userRepository.save(user);
         }
     }

@@ -189,7 +189,7 @@
                             </div>
                         </div>
                         <div class="container">
-                            <table class="table table-striped">
+                            <table class="table table-striped" id="mainTableWithUsers">
                                 <thead>
                                 <tr>
                                     <th style="width: 22%;">Id</th>
@@ -226,30 +226,28 @@
                                 </div>
                             </div>
                         </div>
-                        <form action="/add" class="mx-1 mx-md-4 text-center">
+                        <form id="defaultSomeForm" data-hidden=true class="mx-1 mx-md-4 text-center">
                             <div class="form-group">
                                 <h2 class="text-center text-collor">Username</h2>
-                                <label for="addUsername"></label>
-                                <input type="text" name="addUsername" id="addUsername" required class="form-control">
+                                <label for="AddNewUserUsername"></label>
+                                <input type="text" id="AddNewUserUsername"  required class="form-control">
                             </div>
                             <h2 class="text-center text-collor">Password</h2>
                             <div class="form-group">
-                                <label for="addPassword">Password</label>
-                                <input type="password" name="addPassword" id="addPassword" class="form-control"/>
+                                <label for="AddNewUserPassword">Password</label>
+                                <input type="password" id="AddNewUserPassword" class="form-control" />
                             </div>
                             <h2 class="text-center text-collor">Role</h2>
                             <div class="form-group">
-                                <label for="addRole">addRole User
-                                    <input type="text" required class="form-control" name="addRole" list="addRole"/>
+                                <label for="AddNewUserRole">addRole User
+                                    <input type="text" id="AddNewUserRole"  required class="form-control" list="addRole" />
                                 </label>
                                 <datalist id="addRole">
                                     <option value="ROLE_USER"></option>
                                     <option value="ROLE_ADMIN"></option>
                                 </datalist>
                             </div>
-                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                <button type="submit" class="btn btn-primary btn-lg">Add User</button>
-                            </div>
+                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><button type="button" id="addNewUserButton" class="btn btn-primary btn-lg">Add User</button></div>
                         </form>
                         <a href="/index" class="btn btn-primary btn-block">Главная</a>
                         <sec:authorize access="isAuthenticated()">
@@ -261,130 +259,326 @@
         </section>
     </div>
 </div>
-<script type="text/javascript">
-    fetch("http://localhost:8080/admin/getallusers").then(
-        res=>{
-            res.json().then(
-                data=>{
-                    if(data.length > 0){
-                        let temp = "";
-                        let users = data;
-                        data.forEach((u)=>{
-                            let roles = "";
-                            if(u.roles.length > 1){
-                                roles += u.roles[0].name + ", " + roles + u.roles[1].name
-                            } else {
-                                roles += u.roles[0].name
-                            }
-                            temp += "<tr><td>" + u.id + "</td>";
-                            temp += "<td>" + u.username + "</td>";
-                            temp += "<td>" + roles + "</td>";
-                            temp += "<td>" +
-                                        "<div>" +
-                                            "<div>" +
-                                                "<button data-target='#edituser" + u.id + "' id='edit" + u.id + "' type='button' data-toggle='modal'>" +
-                                                    "Edit" +
-                                                "</button>" +
-                                            "</div>" +
-                                        "</div>";
 
-                            temp += "<div class='modal fade' id='edituser" + u.id + "' aria-labelledby='exampleModalLabel' tabindex='-1'  aria-hidden='true'>" +
-                                "                    <div class='modal-dialog'>" +
-                                "                      <div class='modal-content'>" +
-                                "                        <div class='modal-header float-right'>" +
-                                "                          <h5>User details</h5>" +
-                                "                          <div class=\"text-right\">" +
-                                "                            <i data-dismiss=\"modal\" aria-label=\"Close\" class=\"fa fa-close\"></i>" +
-                                "                          </div>" +
-                                "                        </div>" +
-                                "                        <div class=\"modal-body\">" +
-                                "                          <div class=\"container-inner\">" +
-                                "                            <form action=\"/update\" method=\"post\">" +
-                                "                              <input type=\"hidden\" name=\"userId\" value='" + u.id + "' >" +
-                                "                              <div class=\"form-group text-center\">" +
-                                "                                <label for=\"Id\" >Id</label>" +
-                                "                                <input type=\"text\"  name=\"userId\" disabled placeholder='" + u.id + "' required class=\"form-control text-center\">" +
-                                "                              </div>" +
-                                "                              <div class=\"form-group text-center\">" +
-                                "                                <label for=\"Username\">Username</label>" +
-                                "                                <input type=\"text\" name=\"Username\" value='" + u.username + "'required class=\"form-control text-center\">" +
-                                "                              </div>" +
-                                "                              <div class=\"form-group text-center\">" +
-                                "                                <label for=\"Password\">Password</label>" +
-                                "                                <input type=\"password\"  name=\"Password\" class=\"form-control text-center\" />" +
-                                "                              </div>" +
-                                "                              <div class=\"form-group text-center\">" +
-                                "                                <label for=\"Roles\">Role User" +
-                                "                                  <input type=\"text\" placeholder='" + roles + "'  required class=\"form-control text-center\" name=\"Roles\" list=\"Roles\" />" +
-                                "                                </label>" +
-                                "                                <datalist id=\"Roles\">" +
-                                "                                  <option value=\"ROLE_USER\"></option>" +
-                                "                                  <option value=\"ROLE_ADMIN\"></option>" +
-                                "                                </datalist>" +
-                                "                              </div>" +
-                                "                              <div class=\"modal-footer\">" +
-                                "                                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>" +
-                                "                                <button type=\"submit\" class=\"btn btn-primary\"  value=\"Update User\" >Save changes</button>" +
-                                "                              </div>" +
-                                "                            </form>" +
-                                "                          </div>" +
-                                "                        </div>" +
-                                "                      </div>" +
-                                "                    </div>" +
-                                "                  </div>"
+<div class="modal fade" id="someDefaultModal" tabindex="-1" role="dialog" aria-labelledby="someDefaultModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-                            temp += "<div class=\"modal fade\" id='deleteuser" + u.id + "' tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n" +
-                                "                    <div class=\"modal-dialog\">\n" +
-                                "                      <div class=\"modal-content\">\n" +
-                                "                        <div class=\"modal-header float-right\">\n" +
-                                "                          <h5>User details</h5>\n" +
-                                "                          <div class=\"text-right\">\n" +
-                                "                            <i data-dismiss=\"modal\" aria-label=\"Close\" class=\"fa fa-close\"></i>\n" +
-                                "                          </div>\n" +
-                                "                        </div>\n" +
-                                "                        <div class=\"modal-body\">\n" +
-                                "                          <div class=\"container-inner\">\n" +
-                                "                            <form action='delete' method='post'>\n" +
-                                "                              <div class=\"form-group text-center\">\n" +
-                                "                                  <input hidden name=\"userId\" value='" + u.id + "'/>" +
-                                "                                <label>Id<input type=\"text\" disabled placeholder='" + u.id + "' required class=\"form-control text-center\"></label>\n" +
-                                "                              </div>\n" +
-                                "                              <div class=\"form-group text-center\">\n" +
-                                "                                <label>Username<input type=\"text\" disabled placeholder='" + u.username + "' required class=\"form-control text-center\"></label>\n" +
-                                "                              </div>\n" +
-                                "                              <div class=\"form-group text-center\">\n" +
-                                "                                <label>Role<input type=\"password\" placeholder='" + roles + "'  disabled class=\"form-control text-center\" /></label>\n" +
-                                "                              </div>\n" +
-                                "                              <div class=\"modal-footer\">\n" +
-                                "                                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>\n" +
-                                "                                <button type=\"submit\" class=\"btn btn-danger r\">Delete</button>\n" +
-                                "                              </div>\n" +
-                                "                            </form>\n" +
-                                "                          </div>\n" +
-                                "                        </div>\n" +
-                                "                      </div>\n" +
-                                "                    </div>\n" +
-                                "                  </div>"
+            <div class="modal-header">
+                <div class="modal-title" id="exampleModalLabel">Modal title</div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
-                            temp +=     "<div>" +
-                                            "<div>" +
-                                                "<button data-target='#deleteuser" + u.id + "' id='delete" + u.id + "' type='button' data-toggle='modal'>" +
-                                                    "Delete" +
-                                                "</button>" +
-                                             "</div>" +
-                                        "</div>" +
-                                    "</td></tr>";
-                        })
-                        document.getElementById("data").innerHTML = temp;
-                        users.forEach((u)=>{
-                            document.getElementById("edit" + u.id).className = 'btn btn-primary';
-                            document.getElementById("delete" + u.id).className = 'btn btn-danger';
-                        })
+            <div class="modal-body">
+            </div>
+
+            <div class="modal-footer">
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(async function () {
+        await getTableWithUsers();
+        getNewUserForm();
+        getDefaultModal();
+        addNewUser();
+    })
+
+
+    const userFetchService = {
+        head: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Referer': null
+        },
+        // bodyAdd : async function(user) {return {'method': 'POST', 'headers': this.head, 'body': user}},
+        findAllUsers: async () => await fetch('http://localhost:8080/admin/getallusers'),
+        findOneUser: async (id) => await fetch(`http://localhost:8080/admin/getuser/${id}`),
+        addNewUser: async (user) => await fetch('http://localhost:8080/admin/saveuser', {method: 'POST', headers: userFetchService.head, body: JSON.stringify(user)}),
+        updateUser: async (user, id) => await fetch(`http://localhost:8080/admin/updateuser/${id}`, {method: 'PUT', headers: userFetchService.head, body: JSON.stringify(user)}),
+        deleteUser: async (id) => await fetch(`http://localhost:8080/admin/deleteuser/${id}`, {method: 'DELETE', headers: userFetchService.head})
+    }
+
+    async function getTableWithUsers() {
+        let table = $('#data');
+        table.empty();
+
+        await userFetchService.findAllUsers()
+            .then(res => res.json())
+            .then(users => {
+                users.forEach(user => {
+                    let roles = "";
+                    if(user.roles.length > 1){
+                        roles += user.roles[0].name + ", " + roles + user.roles[1].name
+                    } else {
+                        roles += user.roles[0].name
                     }
-                }
-            )
-        }
-    )
+                    let tableFilling = `$(
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.username}</td>
+                            <td>${roles}</td>
+                            <td>
+                                <button type="button" data-userid="${user.id}" data-action="edit" class="btn btn-primary"
+                                data-toggle="modal" data-target="#someDefaultModal">Edit</button>
+                                <button type="button" data-userid="${user.id}" data-action="delete" class="btn btn-danger"
+                                data-toggle="modal" data-target="#someDefaultModal">Delete</button>
+                            </td>
+                        </tr>
+                )`;
+                    table.append(tableFilling);
+                })
+            })
+
+        // обрабатываем нажатие на любую из кнопок edit или delete
+        // достаем из нее данные и отдаем модалке, которую к тому же открываем
+        $("#mainTableWithUsers").find('button').on('click', (event) => {
+            let defaultModal = $('#someDefaultModal');
+
+            let targetButton = $(event.target);
+            let buttonUserId = targetButton.attr('data-userid');
+            let buttonAction = targetButton.attr('data-action');
+
+            defaultModal.attr('data-userid', buttonUserId);
+            defaultModal.attr('data-action', buttonAction);
+            defaultModal.modal('show');
+        })
+    }
+
+
+    async function getNewUserForm() {
+        let button = $(`#SliderNewUserForm`);
+        let form = $(`#defaultSomeForm`)
+        button.on('click', () => {
+            if (form.attr("data-hidden") === "true") {
+                form.attr('data-hidden', 'false');
+                form.show();
+                button.text('Hide panel');
+            } else {
+                form.attr('data-hidden', 'true');
+                form.hide();
+                button.text('Show panel');
+            }
+        })
+    }
+
+
+    // что то деалем при открытии модалки и при закрытии
+    // основываясь на ее дата атрибутах
+    async function getDefaultModal() {
+        $('#someDefaultModal').modal({
+            keyboard: true,
+            backdrop: "static",
+            show: false
+        }).on("show.bs.modal", (event) => {
+            let thisModal = $(event.target);
+            let userid = thisModal.attr('data-userid');
+            let action = thisModal.attr('data-action');
+            switch (action) {
+                case 'edit':
+                    editUser(thisModal, userid);
+                    break;
+                case 'delete':
+                    deleteUser(thisModal, userid);
+                    break;
+            }
+        }).on("hidden.bs.modal", (e) => {
+            let thisModal = $(e.target);
+            thisModal.find('.modal-title').html('');
+            thisModal.find('.modal-body').html('');
+            thisModal.find('.modal-footer').html('');
+        })
+    }
+
+
+    // редактируем юзера из модалки редактирования, забираем данные, отправляем
+    async function editUser(modal, id) {
+        let preuser = await userFetchService.findOneUser(id);
+        let user = preuser.json();
+
+        let rolesText = "";
+
+        user.then(result => {
+            if(result.roles.length > 1){
+                rolesText += result.roles[0].name + ", " + result.roles[1].name
+            } else {
+                rolesText += result.roles[0].name
+            }
+        })
+
+
+
+
+        modal.find('.modal-title').html('Edit user');
+
+        let editButton = `<button  class="btn btn-outline-success" id="editButton">Edit</button>`;
+        let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
+        modal.find('.modal-footer').append(editButton);
+        modal.find('.modal-footer').append(closeButton);
+
+
+        user.then(user => {
+            let bodyForm = `
+                            <form class="form-group" id="editUser">
+                                <div class="form-group text-center">
+                                    <label for="id" >Id</label>
+                                    <input type=text  name="id" id="id" disabled  value="${user.id}" required class="form-control text-center">
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="username">Username</label>
+                                    <input type="text" id="username" value="${user.username}" required class="form-control text-center">
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" value="${user.password}" class="form-control text-center" />
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="role">Role User
+                                    <input type="text" placeholder="${rolesText}"  required class="form-control text-center" id="role" list="Roles" required/>
+                                </label>
+                                    <datalist id="Roles">
+                                        <option value="ROLE_USER"></option>
+                                        <option value="ROLE_ADMIN"></option>
+                                    </datalist>
+                                </div>
+                            </form>
+        `;
+            modal.find('.modal-body').append(bodyForm);
+        })
+
+        $("#editButton").on('click', async () => {
+            let id = modal.find("#id").val().trim();
+            let username = modal.find("#username").val().trim();
+            let password = modal.find("#password").val().trim();
+            let role = modal.find("#role").val().trim();
+
+            let userdata = {
+                username: username,
+                password: password,
+                role: role
+            }
+
+            const response = await userFetchService.updateUser(userdata, id);
+
+            if (response.ok) {
+                getTableWithUsers();
+                modal.modal('hide');
+            } else {
+                let body = await response.json();
+                let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert" id="sharaBaraMessageError">
+                        ${body.info}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>`;
+                modal.find('.modal-body').prepend(alert);
+            }
+
+        })
+    }
+
+
+    // удаляем юзера из модалки удаления
+    async function deleteUser(modal, id) {
+        let preuser = await userFetchService.findOneUser(id);
+        let user = preuser.json();
+
+        let rolesText = "";
+
+        user.then(result => {
+            if(result.roles.length > 1){
+                rolesText += result.roles[0].name + ", " + result.roles[1].name
+            } else {
+                rolesText += result.roles[0].name
+            }
+        })
+
+        modal.find('.modal-title').html('Delete user');
+
+        user.then(user => {
+
+            let bodyForm = `
+                            <form class="form-group" id="deleteUser">
+                                <div class="form-group text-center">
+                                    <label for="id" >Id</label>
+                                    <input type=text  name="id" id="id" disabled  value="${user.id}" required class="form-control text-center">
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="username">Username</label>
+                                    <input type="text" id="username" value="${user.username}" disabled required class="form-control text-center">
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" value="${user.password}" disabled class="form-control text-center" />
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="role">Role User
+                                    <input type="text" placeholder="${rolesText}" disabled  required class="form-control text-center" id="role"  required/>
+                                </label>
+                                </div>
+                            </form>
+        `;
+            modal.find('.modal-body').append(bodyForm);
+        })
+
+        let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
+        let deleteButton = `<button  class="btn btn-outline-danger" id="deleteButton">Delete</button>`;
+        modal.find('.modal-footer').append(deleteButton);
+        modal.find('.modal-footer').append(closeButton);
+
+        $("#deleteButton").on('click', async () => {
+            const response = await userFetchService.deleteUser(id);
+            if (response.ok) {
+                getTableWithUsers();
+                modal.modal('hide');
+            } else {
+                let body = await response.json();
+                let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert" id="sharaBaraMessageError">
+                        ${body.info}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>`;
+                modal.find('.modal-body').prepend(alert);
+            }
+            })
+    }
+
+
+    async function addNewUser() {
+        $('#addNewUserButton').click(async () =>  {
+            let addUserForm = $('#defaultSomeForm')
+            let username = addUserForm.find('#AddNewUserUsername').val().trim();
+            let password = addUserForm.find('#AddNewUserPassword').val().trim();
+            let role = addUserForm.find('#AddNewUserRole').val().trim();
+            let data = {
+                username: username,
+                password: password,
+                role: role
+            }
+            const response = await userFetchService.addNewUser(data);
+
+            if (response.ok) {
+                getTableWithUsers();
+                addUserForm.find('#AddNewUserUsername').val('');
+                addUserForm.find('#AddNewUserPassword').val('');
+                addUserForm.find('#AddNewUserRole').val('');
+            } else {
+                let body = await response.json();
+                let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert" id="sharaBaraMessageError">
+                            ${body.info}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>`;
+                addUserForm.prepend(alert)
+            }
+        })
+    }
 </script>
 </body>
 </html>
