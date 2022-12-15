@@ -40,13 +40,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 //Перенарпавление на главную страницу после успешного входа
                 .defaultSuccessUrl("/default")
-                .failureUrl("/login?status=error")
+                .failureUrl("/fail")
                 .permitAll()
                 .and()
                 .logout()
                 .permitAll()
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/login");
     }
+
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

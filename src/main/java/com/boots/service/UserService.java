@@ -4,6 +4,7 @@ import com.boots.entity.Role;
 import com.boots.entity.User;
 import com.boots.repository.RoleRepository;
 import com.boots.repository.UserRepository;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,6 +31,8 @@ public class UserService implements UserDetailsService {
     RoleRepository roleRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    static Logger logger = Logger.getLogger(UserService.class.getName());
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
