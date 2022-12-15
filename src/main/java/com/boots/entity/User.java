@@ -1,7 +1,5 @@
 package com.boots.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,21 +10,48 @@ import java.util.Set;
 
 @Entity
 @Table(name = "t_user")
-//@NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Size(min=2, message = "Не меньше 5 знаков")
     private String username;
+    private String firstname;
+    private String lastname;
+    private int age;
+
     @Size(min=2, message = "Не меньше 5 знаков")
     private String password;
+
     @Transient
     private String passwordConfirm;
+
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles;
 
-    public User() {
+    public User() {}
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public Long getId() {

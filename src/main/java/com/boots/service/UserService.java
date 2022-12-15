@@ -30,14 +30,15 @@ public class UserService implements UserDetailsService {
     RoleRepository roleRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         userRepository.findAllUsers();
-        User list = userRepository.findByUsername(username);
-        if (list == null) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        return list;
+        return user;
     }
 
     public User findUserById(Long userId) {
@@ -69,13 +70,16 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public void updateUser(Long id, String username, Set<Role> role, String password) {
+    public void updateUser(Long id, String firstname, String lastname, int age, String username, String password, Set<Role> role) {
         Optional<User> users = userRepository.findById(id);
         if (users.isPresent()){
             User user = users.get();
+            user.setFirstname(firstname);
+            user.setLastname(lastname);
+            user.setAge(age);
             user.setUsername(username);
             user.setRoles(role);
-            if(password.length() < 40) {
+            if(password.length() > 0) {
                 user.setPassword(bCryptPasswordEncoder.encode(password));
             }
             userRepository.save(user);

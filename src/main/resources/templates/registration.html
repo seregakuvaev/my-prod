@@ -19,7 +19,7 @@
     .login-form form {
       margin-bottom: 15px;
       background: #f7f7f7;
-        box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+      box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
       padding: 30px;
     }
     .login-form h2 {
@@ -51,8 +51,29 @@
 
                     <div class="d-flex flex-row align-items-center mb-4">
                       <div class="form-outline flex-fill mb-0">
-                        <input type="text" th:field="*{userForm.username}" id="Username" placeholder="Username" class="form-control" />
+                        <input type="text" th:field="*{userForm.username}" id="Username" placeholder="E-mail" class="form-control" />
                         <label class="form-label" for="Username"></label>
+                      </div>
+                    </div>
+
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <div class="form-outline flex-fill mb-0">
+                        <input type="text" th:field="*{userForm.firstname}" id="Firstname" placeholder="Firstname" class="form-control" />
+                        <label class="form-label" for="Firstname"></label>
+                      </div>
+                    </div>
+
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <div class="form-outline flex-fill mb-0">
+                        <input type="text" th:field="*{userForm.lastname}" id="Lastname" placeholder="Lastname" class="form-control" />
+                        <label class="form-label" for="Lastname"></label>
+                      </div>
+                    </div>
+
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <div class="form-outline flex-fill mb-0">
+                        <input type="number" th:field="*{userForm.age}" id="Age" placeholder="Age" class="form-control" />
+                        <label class="form-label" for="Age"></label>
                       </div>
                     </div>
 
@@ -63,8 +84,8 @@
                       </div>
                     </div>
 
-                      <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><button type="submit" class="btn btn-primary btn-lg">Register</button></div>
-                      <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><a href="/index"><button  type="button" class="btn btn-secondary btn-lg">Menu</button></a></div>
+                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><button type="submit" class="btn btn-primary btn-lg">Register</button></div>
+                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><a href="/index"><button  type="button" class="btn btn-secondary btn-lg">Menu</button></a></div>
 
 
                   </form>

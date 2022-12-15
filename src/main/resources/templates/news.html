@@ -3,13 +3,47 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Bootstrap Simple Login Form</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
+    body {
+        background: #f7f7f7; /* Цвет фона */
+    }
+    .color{
+        color: black;
+    }
+    .brd {
+        border-bottom: 1px double lightgrey;
+        border-top: 1px double lightgrey;
+        padding: 10px; /* Поля вокруг текста */
+    }
+    .gr{
+        border: 1px solid lightgray;
+    }
+    .left{
+        padding-right: 1200px;
+    }
+    .dr{
+        margin-left: 300px;
+        margin-top: -280px;
+    }
+    .sidebar{
+        height: 100%;
+        width: 250px;
+        position: fixed;
+        z-index: 1;
+        top: 3px;
+        left: 0;
+        background-color: #fff;
+        padding-top: 16px;
+        margin-top: 60px;
+    }
     .login-form {
         width: 340px;
         margin: 50px auto;
@@ -24,42 +58,75 @@
     .login-form h2 {
         margin: 0 0 15px;
     }
-    .form-control, .btn {
-        min-height: 38px;
-        border-radius: 2px;
-    }
-    .btn {
-        font-size: 15px;
-        font-weight: bold;
-    }
 </style>
 <body>
-<div>
-    <table class="table table-dark table-bordered table-hover">
-        <thead>
 
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Role</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td></td>
-            <td id="id"></td>
-            <td id="username"></td>
-            <td id="role"></td>
-        </tr>
-        </tbody>
-    </table>
-    <sec:authorize access="isAuthenticated()">
-        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><a href="/logout"><button  type="button" class="btn btn-secondary btn-lg">Logout</button></a></div>
-    </sec:authorize>
-    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><a href="/index"><button  type="button" class="btn btn-primary btn-lg">Menu</button></a></div>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header navbar-expand-lg">
+            <a id="tit" class="navbar-brand left"></a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="row sidebar">
+    <div class="list-group sidebar" id="myList" role="tablist">
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#admintab" role="tab">Admin</a>
+        </div>
+        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#usertab" role="tab">User</a>
+    </div>
+
+    <div class="tab-content dr">
+        <div class="tab-pane active" id="usertab" role="tabpanel">
+            <h1>User information-page</h1>
+            <table class="table gr">
+                <thead class="thead-light">
+                <tr>
+                    <th><h4 class="color">About user</h4></th>
+                </tr>
+                <tbody>
+                <tr>
+                    <td class="bg-white">
+                        <br>
+                        <table class="table table-striped table-hover"  style="width:1200px">
+                            <thead>
+                            <tr class="brd">
+                                <th scope="col">ID</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Role</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td id="id"></td>
+                                <td id="firstname"></td>
+                                <td id="lastname"></td>
+                                <td id="age"></td>
+                                <td id="username"></td>
+                                <td id="role"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+                </thead>
+            </table>
+        </div>
+        <div class="tab-pane" id="admintab" role="tabpanel">2222222222222222222222222222222222</div>
+    </div>
 </div>
 <script type="text/javascript" th:inline="javascript">
+    $(function () {
+        $('#myList a:last-child').tab('show')
+    })
 
     /*<![CDATA[*/
     const baseUrl = [[${session}]];
@@ -69,11 +136,15 @@
         function () {
             let arr = [];
             for(const name of baseUrl.SPRING_SECURITY_CONTEXT.authentication.principal.roles){
-                arr.push(name.name)
+                arr.push(name.name.slice(5))
             }
             $("#id").append(baseUrl.SPRING_SECURITY_CONTEXT.authentication.principal.id)
             $("#username").append(baseUrl.SPRING_SECURITY_CONTEXT.authentication.principal.username)
+            $("#firstname").append(baseUrl.SPRING_SECURITY_CONTEXT.authentication.principal.firstname)
+            $("#lastname").append(baseUrl.SPRING_SECURITY_CONTEXT.authentication.principal.lastname)
+            $("#age").append(baseUrl.SPRING_SECURITY_CONTEXT.authentication.principal.age)
             $("#role").append(arr.toString())
+            $("#tit").append(baseUrl.SPRING_SECURITY_CONTEXT.authentication.principal.username + ' with roles: ' + arr.toString())
         });
 </script>
 </body>

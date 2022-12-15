@@ -1,12 +1,9 @@
 package com.boots.controller;
 
-import com.boots.entity.Role;
 import com.boots.entity.User;
 import com.boots.service.UserService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,31 +11,39 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Controller
 public class DefaultController {
     private final UserService userService;
+
+    static Logger logger = Logger.getLogger(DefaultController.class.getName());
     private String username;
+
     @Autowired
-    public DefaultController(UserService userService){
+    public DefaultController(UserService userService) {
         this.userService = userService;
     }
+
     @GetMapping("/")
-    public String start() {
+    public String index() {
         return "login";
     }
-    @GetMapping("/index")
-    public String index() {
-        return "index";
+
+    @GetMapping("/login")
+    public String start(@RequestParam(name = "status", defaultValue = "success") String status) {
+        if (!status.equals("success")) {
+            logger.error("Неудачная попытка авторизации");  // ловим ошибку авторизации
+        }
+        return "login";
     }
 
     @RequestMapping("/default")
     public String defaultAfterLogin(HttpServletRequest request) {
         this.username = request.getRemoteUser();
+        User user = (User) userService.loadUserByUsername(username);
+        String roles = user.getRoles().toString().replace("[", "").replace("]", "");
+        logger.info("Авторизован пользователь:" + username + "c доступом " + roles);
         if (request.isUserInRole("ROLE_ADMIN")) {
             return "redirect:/admin/";
         }
@@ -70,7 +75,7 @@ public class DefaultController {
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-        if (!userService.saveUser(userForm, 1)){
+        if (!userService.saveUser(userForm, 1)) {
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
             return "registration";
         }
@@ -79,6 +84,8 @@ public class DefaultController {
 
     @GetMapping("/admin")
     public String userList(Model model) {
+        User user = (User) userService.loadUserByUsername(username);
+        model.addAttribute("admin", user);
         model.addAttribute("allUsers", userService.allUsers());
         return "admin";
     }
@@ -89,21 +96,6 @@ public class DefaultController {
         return "redirect:/admin";
     }
 
-    @PostMapping("/update")
-    public String updateUser(@RequestParam(name = "userId") String userId,
-                             @RequestParam(name = "Username") String username,
-                             @RequestParam(name = "Roles") String roles,
-                             @RequestParam(name = "Password") String password) {
-        Set<Role> roleSet = new HashSet<Role>();
-        if (Objects.equals(roles, "ROLE_USER")){
-            roleSet.add(new Role(1L, "ROLE_USER"));
-        }else {
-            roleSet.add(new Role(2L, "ROLE_ADMIN"));
-        }
-        userService.updateUser(Long.valueOf(userId), username, roleSet, password);
-        return "redirect:/admin";
-    }
-
     @GetMapping("/add")
     public String addUser(@RequestParam(name = "addUsername") String userName,
                           @RequestParam(name = "addPassword") String password,
@@ -111,7 +103,7 @@ public class DefaultController {
         User user = new User();
         user.setUsername(userName);
         user.setPassword(password);
-        if (Objects.equals(role, "ROLE_ADMIN")){
+        if (Objects.equals(role, "ROLE_ADMIN")) {
             userService.saveUser(user, 2);
         } else {
             userService.saveUser(user, 1);

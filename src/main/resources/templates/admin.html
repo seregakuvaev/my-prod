@@ -4,21 +4,51 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Bootstrap Table with Search Column Feature</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
         body {
             color: #566787;
             background: #f7f5f2;
             font-family: 'Roboto', sans-serif;
         }
-
+        .color{
+            color: black;
+        }
+        .brd {
+            border-bottom: 1px double lightgrey;
+            border-top: 1px double lightgrey;
+        }
+        .gr{
+            border: 1px solid lightgray;
+        }
+        .left{
+            padding-right: 1100px;
+        }
+        .dr{
+            margin-left: 300px;
+            margin-top: -280px;
+        }
+        .aa{
+            margin-top: 100px;
+        }
+        .sidebar{
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            z-index: 1;
+            top: 3px;
+            left: 0;
+            background-color: #fff;
+            padding-top: 16px;
+            margin-top: 60px;
+        }
         .table-responsive {
             margin: 30px 0;
         }
@@ -26,8 +56,9 @@
         .table-wrapper {
             min-width: 1000px;
             background: #fff;
-            padding: 20px 25px;
-            border-radius: 3px;
+            padding: 5px 5px;
+            border: 5px double lightgrey;
+            border-radius: 5px;
             box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
         }
 
@@ -67,10 +98,10 @@
             top: 2px;
         }
 
-        table.table {
-            table-layout: fixed;
-            margin-top: 15px;
-        }
+        /*table.table {*/
+        /*    table-layout: fixed;*/    /*багает*/
+        /*    margin-top: 15px;*/
+        /*}*/
 
         table.table tr th, table.table tr td {
             border-color: #e9e9e9;
@@ -78,7 +109,7 @@
 
         table.table th i {
             font-size: 13px;
-            margin: 0 5px;
+            margin: 0 10px;
             cursor: pointer;
         }
 
@@ -93,15 +124,11 @@
         table.table td a {
             color: #a0a5b1;
             display: inline-block;
-            margin: 0 5px;
+            margin: 0 10px;
         }
 
         table.table td a.view {
             color: #03A9F4;
-        }
-
-        .text-collor {
-            color: #28052b;
         }
 
         table.table td a.edit {
@@ -151,14 +178,14 @@
             border-bottom: none; /* Снизу линию убираем */
         }
 
-        .tab-content {
-            position: absolute; /* Абсолютное позиционирование */
-            border: 1px solid #666; /* Параметры рамки */
-            padding: 10px; /* Поля вокруг текста */
-            left: 0; /* Размещаем у левого края */
-            width: calc(100% - 20px); /* Ширина содержимого */
-            display: none; /* Прячем вкладку */
-        }
+        /*.tab-content {*/
+        /*    position: absolute; !* Абсолютное позиционирование *!*/
+        /*    border: 1px solid #666; !* Параметры рамки *!*/
+        /*    padding: 10px; !* Поля вокруг текста *!*/
+        /*    left: 0; !* Размещаем у левого края *!*/
+        /*    width: calc(100% - 20px); !* Ширина содержимого *!*/
+        /*    display: none; !* Прячем вкладку *!*/
+        /*}*/
 
         .tab :checked + .tab-title {
             position: relative; /* Относительное позиционирование */
@@ -173,94 +200,183 @@
     </style>
 </head>
 <body>
-<div class="tabs btn-dark">
-    <div class="tab">
-        <input type="radio" id="tab1" name="tab-group" checked>
-        <label for="tab1" class="tab-title">Users List</label>
-        <section class="tab-content">
-            <div class="container-lg">
-                <div class="table-responsive">
-                    <div class="table-wrapper">
-                        <div class="table-title table-hover">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <h2>Users</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="container">
-                            <table class="table table-striped" id="mainTableWithUsers">
-                                <thead>
-                                <tr>
-                                    <th style="width: 22%;">Id</th>
-                                    <th style="width: 22%;">Name</th>
-                                    <th>Roles</th>
-                                    <th>Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody id="data">
 
-                                </tbody>
-                            </table>
-                        </div>
-                        <a href="/index" class="btn btn-primary btn-block">Главная</a>
-                        <sec:authorize access="isAuthenticated()">
-                            <h4><a href="/logout" class="btn btn-secondary btn-block">Выйти</a></h4>
-                        </sec:authorize>
-                    </div>
-                </div>
-            </div>
-        </section>
+<div hidden id="admin" th:text="${admin.id}"></div>
+
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header navbar-expand-lg">
+            <a id="tit" class="navbar-brand left"></a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/logout">Logout</a></li>
+        </ul>
     </div>
-    <div class="tab">
-        <input type="radio" id="tab2" name="tab-group">
-        <label for="tab2" class="tab-title">Add User</label>
-        <section class="tab-content">
-            <div class="container-lg">
-                <div class="table-responsive">
-                    <div class="table-wrapper">
-                        <div class="table-title table-hover">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <h2>Add User</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <form id="defaultSomeForm" data-hidden=true class="mx-1 mx-md-4 text-center">
-                            <div class="form-group">
-                                <h2 class="text-center text-collor">Username</h2>
-                                <label for="AddNewUserUsername"></label>
-                                <input type="text" id="AddNewUserUsername"  required class="form-control">
-                            </div>
-                            <h2 class="text-center text-collor">Password</h2>
-                            <div class="form-group">
-                                <label for="AddNewUserPassword">Password</label>
-                                <input type="password" id="AddNewUserPassword" class="form-control" />
-                            </div>
-                            <h2 class="text-center text-collor">Role</h2>
-                            <div class="form-group">
-                                <label for="AddNewUserRole">addRole User
-                                    <input type="text" id="AddNewUserRole"  required class="form-control" list="addRole" />
-                                </label>
-                                <datalist id="addRole">
-                                    <option value="ROLE_USER"></option>
-                                    <option value="ROLE_ADMIN"></option>
-                                </datalist>
-                            </div>
-                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4"><button type="button" id="addNewUserButton" class="btn btn-primary btn-lg">Add User</button></div>
-                        </form>
-                        <a href="/index" class="btn btn-primary btn-block">Главная</a>
-                        <sec:authorize access="isAuthenticated()">
-                            <h4><a href="/logout" class="btn btn-secondary btn-block">Выйти</a></h4>
-                        </sec:authorize>
-                    </div>
+</nav>
+
+<div class="row sidebar">
+    <div class="list-group sidebar" id="myList" role="tablist">
+        <a class="list-group-item list-group-item-action" data-toggle="list" href="#usertab" role="tab">User</a>
+        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#admintab" role="tab">Admin</a>
+    </div>
+
+    <div class="tab-content dr">
+        <div class="tab-pane" id="usertab" role="tabpanel">
+            <h1 style="margin-top: 60px">User information-page</h1>
+            <table class="table gr">
+                <thead class="thead-light">
+                <tr>
+                    <th><h4 class="color">About user</h4></th>
+                </tr>
+                <tbody>
+                <tr>
+                    <td class="bg-white" style="padding: 0 30px">
+                        <br>
+                        <table class="table table-striped table-hover"  style="width:1150px">
+                            <thead>
+                            <tr class="brd">
+                                <th scope="col">ID</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Role</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td id="id"></td>
+                                <td id="firstname"></td>
+                                <td id="lastname"></td>
+                                <td id="age"></td>
+                                <td id="username"></td>
+                                <td id="role"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane active" id="admintab" role="tabpanel" style="margin-top: 40px">
+
+            <h2>Admin Panel</h2>
+
+
+            <div class="nav nav-tabs" id="myTab" role="tablist">
+                <a class="nav-link" data-toggle="list" id="newusericon" href="#newuser" role="tabpanel">New User</a>
+                <a class="nav-link active"  data-toggle="list" id="userstable" href="#adminpanel" role="tabpanel">Users Table</a>
+            </div>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane" id="newuser" role="tabpanel">
+
+                    <table class="table gr" style="width:1200px; margin-bottom: -400px;">
+                        <thead class="thead-light">
+                        <tr>
+                            <th><h4 class="color">Add New User</h4></th>
+                        </tr>
+                        <tbody>
+                        <tr>
+                            <td class="bg-white">
+                                <form id="defaultSomeForm">
+
+                                    <h5 class="text-center" style="font-weight:bold">First Name</h5>
+                                    <label for="AddNewUserFirstname"></label>
+                                    <input type="text" id="AddNewUserFirstname"  required style="margin-left: 445px; width: 280px; height: 25px; border-radius: 6px">
+
+                                    <div class="form-group">
+                                        <h5 class="text-center text-collor" style="font-weight:bold">Last Name</h5>
+                                        <label for="AddNewUserLastname"></label>
+                                        <input type="text" id="AddNewUserLastname"  required style="margin-left: 445px; width: 280px; height: 25px; border-radius: 6px">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h5 class="text-center text-collor" style="font-weight:bold">Age</h5>
+                                        <label for="AddNewUserAge"></label>
+                                        <input type="number" id="AddNewUserAge"  required style="margin-left: 445px; width: 280px; height: 25px; border-radius: 6px">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h5 class="text-center text-collor" style="font-weight:bold">Email</h5>
+                                        <label for="AddNewUserUsername"></label>
+                                        <input type="text" id="AddNewUserUsername"  required style="margin-left: 445px; width: 280px; height: 25px; border-radius: 6px">
+                                    </div>
+
+                                    <h5 class="text-center text-collor" style="font-weight:bold">Password</h5>
+
+                                    <div class="form-group">
+                                        <label for="AddNewUserPassword"></label>
+                                        <input type="password" id="AddNewUserPassword" style="margin-left: 445px; width: 280px; height: 25px; border-radius: 6px" />
+                                    </div>
+
+                                    <h5 class="text-center text-collor" style="font-weight:bold">Role</h5>
+
+
+                                    <div class="form-group">
+                                        <label for="AddNewUserRole"></label>
+                                        <select multiple class="text-center" id="AddNewUserRole" required style="margin-left: 445px; width: 280px; height: 40px">
+                                            <option value="ROLE_USER">ROLE_USER</option>
+                                            <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4 text-center"><button type="button" id="addNewUserButton" class="btn btn-success btn-lg">Add new user</button></div>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+
+                <div class="tab-pane active" id="adminpanel" role="tabpanel">
+
+                    <table class="table gr"  style="margin-bottom: -400px; max-height: 500px">
+                        <thead class="thead-light">
+                        <tr>
+                            <th><h4 class="color" style="margin-left: 20px;">All Users</h4></th>
+                        </tr>
+                        <tbody>
+                        <tr>
+                            <td class="bg-white" style="padding: 0 30px">
+                                <br>
+                                <table class="table table-striped table-hover" id="mainTableWithUsers"  style="width:1150px; padding-left: 50px">
+                                    <thead>
+                                    <tr class="brd">
+                                        <th scope="col">ID</th>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">Age</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Role</th>
+                                        <th scope="col">Edit</th>
+                                        <th scope="col">Delete</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="data"></tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
                 </div>
             </div>
-        </section>
+
+
+        </div>
     </div>
 </div>
 
-<div class="modal fade" id="someDefaultModal" tabindex="-1" role="dialog" aria-labelledby="someDefaultModalLabel" aria-hidden="true">
+<!--modal fade-->
+
+<div class="modal" id="someDefaultModal" tabindex="-1" role="dialog" aria-labelledby="someDefaultModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -281,6 +397,15 @@
     </div>
 </div>
 <script>
+
+    $(function () {
+        $('#myList a:last-child').tab('show')
+    })
+
+    $(function () {
+        $('#myTab a:last-child').tab('show')
+    })
+
     $(async function () {
         await getTableWithUsers();
         getNewUserForm();
@@ -303,6 +428,25 @@
         deleteUser: async (id) => await fetch(`http://localhost:8080/admin/deleteuser/${id}`, {method: 'DELETE', headers: userFetchService.head})
     }
 
+    //заполнение личных данных
+    userFetchService.findOneUser($("#admin").text())
+        .then(res => res.json())
+        .then(user => {
+            let arr = [];
+            for(const name of user.roles){
+                arr.push(name.name.slice(5))
+            }
+            $("#id").append(user.id)
+            $("#username").append(user.username)
+            $("#firstname").append(user.firstname)
+            $("#lastname").append(user.lastname)
+            $("#age").append(user.age)
+            $("#role").append(arr.toString())
+            $("#tit").append(user.username + ' with roles: ' + arr.toString())
+        })
+    // конец заполенния личных данных
+
+    //заполнение общей таблицы
     async function getTableWithUsers() {
         let table = $('#data');
         table.empty();
@@ -311,20 +455,26 @@
             .then(res => res.json())
             .then(users => {
                 users.forEach(user => {
-                    let roles = "";
+                    let roles = [];
                     if(user.roles.length > 1){
-                        roles += user.roles[0].name + ", " + roles + user.roles[1].name
+                        roles.push(user.roles[0].name.slice(5))
+                        roles.push(user.roles[1].name.slice(5))
                     } else {
-                        roles += user.roles[0].name
+                        roles.push(user.roles[0].name.slice(5))
                     }
                     let tableFilling = `$(
                         <tr>
                             <td>${user.id}</td>
+                            <td>${user.firstname}</td>
+                            <td>${user.lastname}</td>
+                            <td>${user.age}</td>
                             <td>${user.username}</td>
-                            <td>${roles}</td>
+                            <td>${roles.toString()}</td>
                             <td>
                                 <button type="button" data-userid="${user.id}" data-action="edit" class="btn btn-primary"
                                 data-toggle="modal" data-target="#someDefaultModal">Edit</button>
+                            </td>
+                            <td>
                                 <button type="button" data-userid="${user.id}" data-action="delete" class="btn btn-danger"
                                 data-toggle="modal" data-target="#someDefaultModal">Delete</button>
                             </td>
@@ -400,23 +550,11 @@
         let preuser = await userFetchService.findOneUser(id);
         let user = preuser.json();
 
-        let rolesText = "";
-
-        user.then(result => {
-            if(result.roles.length > 1){
-                rolesText += result.roles[0].name + ", " + result.roles[1].name
-            } else {
-                rolesText += result.roles[0].name
-            }
-        })
-
-
-
 
         modal.find('.modal-title').html('Edit user');
 
-        let editButton = `<button  class="btn btn-outline-success" id="editButton">Edit</button>`;
-        let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
+        let editButton = `<button  class="btn btn-outline-success"  id="editButton">Edit</button>`;
+        let closeButton = `<button type="button" class="btn btn-secondary" id="closeButton" data-dismiss="modal">Close</button>`
         modal.find('.modal-footer').append(editButton);
         modal.find('.modal-footer').append(closeButton);
 
@@ -425,25 +563,36 @@
             let bodyForm = `
                             <form class="form-group" id="editUser">
                                 <div class="form-group text-center">
-                                    <label for="id" >Id</label>
-                                    <input type=text  name="id" id="id" disabled  value="${user.id}" required class="form-control text-center">
+                                    <label for="id" >ID</label>
+                                    <input type=text  name="id" id="id" disabled style="width: 250px; margin-left: 110px"  value="${user.id}" required class="form-control text-center">
                                 </div>
                                 <div class="form-group text-center">
-                                    <label for="username">Username</label>
-                                    <input type="text" id="username" value="${user.username}" required class="form-control text-center">
+                                    <label for="firstname" >First Name</label>
+                                    <input type=text  name="firstname" id="firstname" style="width: 250px; margin-left: 110px"  value="${user.firstname}" required class="form-control text-center">
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="lastname" >Last Name</label>
+                                    <input type=text  name="lastname" id="lastname" style="width: 250px; margin-left: 110px"  value="${user.lastname}" required class="form-control text-center">
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="age" >Age</label>
+                                    <input type=number  name="age" id="age" style="width: 250px; margin-left: 110px"  value="${user.age}" required class="form-control text-center">
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="username">Email</label>
+                                    <input type="text" id="username" style="width: 250px; margin-left: 110px" value="${user.username}" required class="form-control text-center">
                                 </div>
                                 <div class="form-group text-center">
                                     <label for="password">Password</label>
-                                    <input type="password" id="password" value="${user.password}" class="form-control text-center" />
+                                    <input type="password" style="width: 250px; margin-left: 110px" id="password" class="form-control text-center" />
                                 </div>
+
                                 <div class="form-group text-center">
-                                    <label for="role">Role User
-                                    <input type="text" placeholder="${rolesText}"  required class="form-control text-center" id="role" list="Roles" required/>
-                                </label>
-                                    <datalist id="Roles">
-                                        <option value="ROLE_USER"></option>
-                                        <option value="ROLE_ADMIN"></option>
-                                    </datalist>
+                                    <label for="role">Role User</label>
+                                    <select multiple required class="form-control text-center" id="role" style="height: 50px; width: 250px; margin-left: 110px">
+                                            <option value="ROLE_USER">ROLE_USER</option>
+                                            <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                    </select>
                                 </div>
                             </form>
         `;
@@ -451,22 +600,29 @@
         })
 
         $("#editButton").on('click', async () => {
-            let id = modal.find("#id").val().trim();
-            let username = modal.find("#username").val().trim();
-            let password = modal.find("#password").val().trim();
-            let role = modal.find("#role").val().trim();
+            let id = modal.find("#id").val();
+            let firstname = modal.find("#firstname").val();
+            let lastname = modal.find("#lastname").val();
+            let age = modal.find("#age").val();
+            let username = modal.find("#username").val();
+            let password = modal.find("#password").val();
+            let role = modal.find("#role").val();
 
             let userdata = {
+                firstname: firstname,
+                lastname: lastname,
+                age: age,
                 username: username,
                 password: password,
-                role: role
+                role: role[0]
             }
 
             const response = await userFetchService.updateUser(userdata, id);
 
             if (response.ok) {
                 getTableWithUsers();
-                modal.modal('hide');
+                $("#closeButton").click()
+                modal.modal('hide'); // не работает добавил вызов через селектор работающей кнопки
             } else {
                 let body = await response.json();
                 let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert" id="sharaBaraMessageError">
@@ -477,7 +633,6 @@
                     </div>`;
                 modal.find('.modal-body').prepend(alert);
             }
-
         })
     }
 
@@ -487,16 +642,6 @@
         let preuser = await userFetchService.findOneUser(id);
         let user = preuser.json();
 
-        let rolesText = "";
-
-        user.then(result => {
-            if(result.roles.length > 1){
-                rolesText += result.roles[0].name + ", " + result.roles[1].name
-            } else {
-                rolesText += result.roles[0].name
-            }
-        })
-
         modal.find('.modal-title').html('Delete user');
 
         user.then(user => {
@@ -504,28 +649,38 @@
             let bodyForm = `
                             <form class="form-group" id="deleteUser">
                                 <div class="form-group text-center">
-                                    <label for="id" >Id</label>
-                                    <input type=text  name="id" id="id" disabled  value="${user.id}" required class="form-control text-center">
+                                    <label for="id" >ID</label>
+                                    <input type=text  name="id" id="id" disabled style="width: 250px; margin-left: 110px"  value="${user.id}" required class="form-control text-center">
                                 </div>
                                 <div class="form-group text-center">
-                                    <label for="username">Username</label>
-                                    <input type="text" id="username" value="${user.username}" disabled required class="form-control text-center">
+                                    <label for="firstname" >First Name</label>
+                                    <input type=text  name="firstname" disabled id="firstname" style="width: 250px; margin-left: 110px"  value="${user.firstname}" required class="form-control text-center">
                                 </div>
                                 <div class="form-group text-center">
-                                    <label for="password">Password</label>
-                                    <input type="password" id="password" value="${user.password}" disabled class="form-control text-center" />
+                                    <label for="lastname" >Last Name</label>
+                                    <input type=text  name="lastname" disabled id="lastname" style="width: 250px; margin-left: 110px"  value="${user.lastname}" required class="form-control text-center">
                                 </div>
                                 <div class="form-group text-center">
-                                    <label for="role">Role User
-                                    <input type="text" placeholder="${rolesText}" disabled  required class="form-control text-center" id="role"  required/>
-                                </label>
+                                    <label for="age" >Age</label>
+                                    <input type=number  name="age" disabled id="age" style="width: 250px; margin-left: 110px"  value="${user.age}" required class="form-control text-center">
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="username">Email</label>
+                                    <input type="text" id="username" disabled style="width: 250px; margin-left: 110px" value="${user.username}" required class="form-control text-center">
+                                </div>
+                                <div class="form-group text-center">
+                                    <label for="role">Role User</label>
+                                    <select multiple required class="form-control text-center" disabled id="role" style="height: 50px; width: 250px; margin-left: 110px">
+                                            <option value="ROLE_USER">ROLE_USER</option>
+                                            <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                    </select>
                                 </div>
                             </form>
         `;
             modal.find('.modal-body').append(bodyForm);
         })
 
-        let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
+        let closeButton = `<button type="button" class="btn btn-secondary" id="closeButton" data-dismiss="modal">Close</button>`
         let deleteButton = `<button  class="btn btn-outline-danger" id="deleteButton">Delete</button>`;
         modal.find('.modal-footer').append(deleteButton);
         modal.find('.modal-footer').append(closeButton);
@@ -534,6 +689,7 @@
             const response = await userFetchService.deleteUser(id);
             if (response.ok) {
                 getTableWithUsers();
+                $("#closeButton").click()
                 modal.modal('hide');
             } else {
                 let body = await response.json();
@@ -545,28 +701,46 @@
                     </div>`;
                 modal.find('.modal-body').prepend(alert);
             }
-            })
+        })
     }
 
 
     async function addNewUser() {
         $('#addNewUserButton').click(async () =>  {
             let addUserForm = $('#defaultSomeForm')
-            let username = addUserForm.find('#AddNewUserUsername').val().trim();
-            let password = addUserForm.find('#AddNewUserPassword').val().trim();
-            let role = addUserForm.find('#AddNewUserRole').val().trim();
+            let firstname = addUserForm.find('#AddNewUserFirstname').val();
+            let lastname = addUserForm.find('#AddNewUserLastname').val();
+            let age = addUserForm.find('#AddNewUserAge').val();
+            let username = addUserForm.find('#AddNewUserUsername').val();
+            let password = addUserForm.find('#AddNewUserPassword').val();
+            let role = addUserForm.find('#AddNewUserRole').val();
+
             let data = {
+                firstname: firstname,
+                lastname: lastname,
+                age: age,
                 username: username,
                 password: password,
-                role: role
+                role: role[0]
             }
+
             const response = await userFetchService.addNewUser(data);
 
             if (response.ok) {
                 getTableWithUsers();
+                addUserForm.find('#AddNewUserFirstname').val('');
+                addUserForm.find('#AddNewUserLastname').val('');
+                addUserForm.find('#AddNewUserAge').val('');
                 addUserForm.find('#AddNewUserUsername').val('');
                 addUserForm.find('#AddNewUserPassword').val('');
                 addUserForm.find('#AddNewUserRole').val('');
+
+                $("#userstable").toggleClass('active');
+                $("#newusericon").toggleClass('active');
+
+
+                $("#adminpanel").toggleClass('active');
+                $("#newuser").toggleClass('active');
             } else {
                 let body = await response.json();
                 let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert" id="sharaBaraMessageError">
