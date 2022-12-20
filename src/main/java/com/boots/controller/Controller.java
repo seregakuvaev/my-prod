@@ -1,5 +1,6 @@
 package com.boots.controller;
 
+import com.boots.entity.Logs;
 import com.boots.entity.Role;
 import com.boots.entity.User;
 import com.boots.service.UserService;
@@ -13,20 +14,22 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.LocalTime;
 import java.util.*;
 
 @org.springframework.stereotype.Controller
 public class Controller {
+
     private final UserService userService;
-
-    static Logger logger = Logger.getLogger(Controller.class.getName());
-
-    private String usernameLogged;
 
     @Autowired
     public Controller(UserService userService) {
         this.userService = userService;
     }
+
+    static Logger logger = Logger.getLogger(Controller.class.getName());
+
+    private String usernameLogged;
 
 
     // DefaultControllers
@@ -92,6 +95,10 @@ public class Controller {
 
         logger.info("Новым пользователем создан аккаунт " + userForm.getUsername() + ";"); // возможно стоит добавить поля
 
+        userService.addLogs("New user", "Create", null,  userForm.getUsername(), "New",
+                userForm.getFirstname(), userForm.getLastname(), userForm.getAge(),
+                userForm.getRoles().toString().replace("[","").replace("]",""));
+
         return "redirect:/login";
     }
 
@@ -154,6 +161,9 @@ public class Controller {
         logger.info(usernameLogged + " создал пользователя " +
                 userData.get("username") + " с правами " + userData.get("role") +";");
 
+        userService.addLogs(usernameLogged, "Create", null, userData.get("username"), "New",
+                userData.get("firstname"), userData.get("lastname"), Integer.parseInt(userData.get("age")), userData.get("role"));
+
         User user = new User();
         user.setFirstname(userData.get("firstname"));
         user.setLastname(userData.get("lastname"));
@@ -181,27 +191,44 @@ public class Controller {
         User preuser = userService.findUserById(id);
 
         StringBuilder updateInfo = new StringBuilder();
+        Logs log = new Logs();
+
+        log.setInstigator(usernameLogged);
+        log.setChange("Update");
+        log.setUsername_changed(preuser.getUsername());
+        log.setTime(LocalTime.now());
 
         if (!Objects.equals(preuser.getFirstname(), userData.get("firstname"))){
             updateInfo.append("firstname ");
+            log.setFirstname(userData.get("firstname"));
         }
         if (!Objects.equals(preuser.getLastname(), userData.get("lastname"))){
             updateInfo.append("lastname ");
+            log.setLastname(userData.get("lastname"));
         }
         if (!Objects.equals(preuser.getAge(), Integer.parseInt(userData.get("age")))){
             updateInfo.append("age ");
+            log.setAge(Integer.parseInt(userData.get("age")));
+        }
+        else {
+            log.setAge(-1);
         }
         if (!Objects.equals(preuser.getRoles().toString().replace("[","")
                 .replace("]",""), userData.get("role"))){
             updateInfo.append("role ");
+            log.setRoles(userData.get("role"));
         }
         if (userData.get("password").length() > 0){
             updateInfo.append("password ");
+            log.setPassword("Updated");
         }
         if (!Objects.equals(preuser.getUsername(), userData.get("username"))){
             updateInfo.append(", логин изменен на ").append(userData.get("username"));
+            log.setUsername(userData.get("username"));
         }
         updateInfo.append(";");
+
+        userService.addLogs(log); // добавляем лог в бд
 
         logger.info(usernameLogged + " изменил пользователю " + preuser.getUsername() + " поля " + updateInfo);
 
@@ -214,6 +241,10 @@ public class Controller {
     public void deleteMyData(@PathVariable long id) {
 
         User deleteuser = userService.findUserById(id);
+
+        userService.addLogs(usernameLogged, "Delete", deleteuser.getUsername(), deleteuser.getUsername(), "Deleted",
+                deleteuser.getFirstname(), deleteuser.getLastname(), deleteuser.getAge(),
+                deleteuser.getRoles().toString().replace("[", "").replace("]", ""));
 
         logger.info(usernameLogged + " удалил пользователя " + deleteuser.getUsername() + " с правами " +
                 deleteuser.getRoles().toString().replace("[", "").replace("]", "") + ";");

@@ -1,7 +1,9 @@
 package com.boots.service;
 
+import com.boots.entity.Logs;
 import com.boots.entity.Role;
 import com.boots.entity.User;
+import com.boots.repository.LogsRepository;
 import com.boots.repository.RoleRepository;
 import com.boots.repository.UserRepository;
 import org.apache.log4j.Logger;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +33,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     RoleRepository roleRepository;
     @Autowired
+    LogsRepository logsRepository;
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    static Logger logger = Logger.getLogger(UserService.class.getName());
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -87,6 +90,26 @@ public class UserService implements UserDetailsService {
             }
             userRepository.save(user);
         }
+    }
+
+    public void addLogs(String instigator, String change, String username_changed, String username,
+                   String password, String firstname, String lastname, int age, String roles){
+        Logs log = new Logs();
+        log.setInstigator(instigator);
+        log.setChange(change);
+        log.setUsername_changed(username_changed);
+        log.setUsername(username);
+        log.setPassword(password);
+        log.setFirstname(firstname);
+        log.setLastname(lastname);
+        log.setAge(age);
+        log.setRoles(roles);
+        log.setTime(LocalTime.now());
+        logsRepository.save(log);
+    }
+
+    public void addLogs(Logs log){
+        logsRepository.save(log);
     }
 
     public boolean deleteUser(Long userId) {
